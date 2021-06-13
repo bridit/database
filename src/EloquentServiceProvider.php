@@ -10,7 +10,7 @@ class EloquentServiceProvider extends ServiceProvider
   public function boot()
   {
 
-    $databaseConfig = $this->container->get('database');
+    $databaseConfig = config('database');
     
     $default = $databaseConfig['default'];
     $connections = $databaseConfig['connections'] ?? [];
