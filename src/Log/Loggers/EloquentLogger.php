@@ -19,7 +19,10 @@ class EloquentLogger
     $logger = new Logger('eloquent');
     $logger->pushHandler(new EloquentHandler());
     $logger->pushProcessor(new ContextProcessor());
-    $logger->pushProcessor(new RequestProcessor());
+
+    if (APP_HANDLER_TYPE === 'http') {
+      $logger->pushProcessor(new RequestProcessor());
+    }
 
     return $logger;
 
