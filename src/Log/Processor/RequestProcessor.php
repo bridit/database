@@ -12,9 +12,7 @@ class RequestProcessor
 
     $request = request();
 
-    $record['app_id'] = $request->header('app-id');
     $record['client_id'] = $request->getAttribute('oauth_client_id');
-    $record['customer_id'] = null;
     $record['user_id'] = $request->getAttribute('oauth_user_id');
 
     $url = $request->getUri()->getScheme() . '://' .

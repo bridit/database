@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Brid\Database\Log\Loggers;
 
-use Monolog\Logger;
-use Psr\Log\LoggerInterface;
 use Brid\Database\Log\Handler\EloquentHandler;
 use Brid\Database\Log\Processor\ContextProcessor;
 use Brid\Database\Log\Processor\RequestProcessor;
+use Monolog\Handler\AbstractProcessingHandler;
+use Monolog\Logger;
+use Psr\Log\LoggerInterface;
 
 class EloquentLogger
 {
@@ -17,15 +18,33 @@ class EloquentLogger
   {
 
     $logger = new Logger('eloquent');
-    $logger->pushHandler(new EloquentHandler());
-    $logger->pushProcessor(new ContextProcessor());
+    $logger->pushHandler($this->getHandler());
+    $logger->pushProcessor($this->getContextProcessor());
 
     if (APP_HANDLER_TYPE === 'http') {
-      $logger->pushProcessor(new RequestProcessor());
+      $logger->pushProcessor($this->getRequestProcessor());
     }
 
     return $logger;
 
+  }
+
+  /**
+   * @return AbstractProcessingHandler
+   */
+  protected function getHandler(): AbstractProcessingHandler
+  {
+    return new EloquentHandler();
+  }
+
+  protected function getContextProcessor()
+  {
+    return new ContextProcessor();
+  }
+
+  protected function getRequestProcessor()
+  {
+    return new RequestProcessor();
   }
 
 }

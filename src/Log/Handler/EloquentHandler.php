@@ -26,19 +26,10 @@ class EloquentHandler extends AbstractProcessingHandler
 
     unset($context['exception']);
 
-    app()->get('db')->table('logs')->insert([
-      'id' => Uuid::uuid4()->toString(),
-      'created_at' => Carbon::now(),
-      'app_id' => $record['app_id'],
-      'client_id' => $record['client_id'],
-      'customer_id' => $record['customer_id'],
-      'user_id' => $record['user_id'],
-      'level' => strtolower($record['level_name']),
-      'type' => $record['type'],
-      'message' => $record['message'],
-      'context' => json_encode($context),
-      'extra' => json_encode($record['extra']),
-    ]);
+    app()
+      ->get('db')
+      ->table('logs')
+      ->insert($this->getRecord($record, $context));
 
   }
 
@@ -48,6 +39,26 @@ class EloquentHandler extends AbstractProcessingHandler
   protected function getDefaultFormatter(): FormatterInterface
   {
     return new EloquentFormatter();
+  }
+
+  /**
+   * @param array $record
+   * @param array $context
+   * @return array
+   */
+  protected function getRecord(array $record, array $context): array
+  {
+    return [
+      'id' => Uuid::uuid4()->toString(),
+      'created_at' => Carbon::now(),
+      'client_id' => $record['client_id'],
+      'user_id' => $record['user_id'],
+      'level' => strtolower($record['level_name']),
+      'type' => $record['type'],
+      'message' => $record['message'],
+      'context' => json_encode($context),
+      'extra' => json_encode($record['extra']),
+    ];
   }
 
 }
