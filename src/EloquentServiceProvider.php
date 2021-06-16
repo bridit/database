@@ -3,6 +3,7 @@
 namespace Brid\Database;
 
 use Brid\Core\Foundation\Providers\ServiceProvider;
+use Illuminate\Database\Capsule\Manager;
 
 class EloquentServiceProvider extends ServiceProvider
 {
@@ -14,9 +15,8 @@ class EloquentServiceProvider extends ServiceProvider
     
     $default = $databaseConfig['default'];
     $connections = $databaseConfig['connections'] ?? [];
-    $managerClassName = '\Illuminate\Database\Capsule\Manager';
 
-    $capsule = new $managerClassName;
+    $capsule = new Manager();
 
     foreach ($connections as $name => $config)
     {
