@@ -49,15 +49,15 @@ class EloquentHandler extends AbstractProcessingHandler
   protected function getRecord(array $record, array $context): array
   {
     return [
-      'id' => Uuid::uuid4()->toString(),
+      'id' => (string) Uuid::uuid4(),
       'created_at' => Carbon::now(),
-      'client_id' => $record['client_id'],
-      'user_id' => $record['user_id'],
+      'client_id' => $record['client_id'] ?? null,
+      'user_id' => $record['user_id'] ?? null,
       'level' => strtolower($record['level_name']),
       'type' => $record['type'],
       'message' => $record['message'],
       'context' => json_encode($context),
-      'extra' => json_encode($record['extra']),
+      'extra' => json_encode($record['extra'] ?? []),
     ];
   }
 
