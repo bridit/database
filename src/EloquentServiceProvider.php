@@ -28,7 +28,7 @@ class EloquentServiceProvider extends ServiceProvider
     $capsule->setAsGlobal();
     $capsule->bootEloquent();
 
-    $this->container->set('db', $capsule);
+    $this->container->set('db', $capsule->getDatabaseManager());
 
   }
 
